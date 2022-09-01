@@ -1,5 +1,7 @@
 from django.urls import include, path
-from . views import UserViewSet, ChangePasswordView, SubscriptionViewSet
+
+from .views import UserViewSet, ChangePasswordView, SubscriptionViewSet
+
 app_name = 'users'
 
 urlpatterns = [
@@ -8,7 +10,7 @@ urlpatterns = [
          ),
     path('set_password/', ChangePasswordView.as_view(
         {'post': 'update'}), name='set_password'
-    ),
+         ),
     path('', include('djoser.urls.authtoken')),
     path('subscriptions/', SubscriptionViewSet.as_view(
         {'get': 'list'}), name='subscriptions'

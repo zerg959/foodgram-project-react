@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator
 
 from users.models import User
 
@@ -33,10 +34,9 @@ class Tag(models.Model):
         max_length=7,
     )
     slug = models.SlugField(
-        'tag',
         unique=True,
         max_length=50,
-
+        verbose_name='tag',
     )
 
     class Meta:
@@ -60,7 +60,7 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         related_name='recipes',
-        through='IngredientsCount'
+        through='CountIngredient'
     )
     name = models.CharField(
         'name',
@@ -68,7 +68,8 @@ class Recipe(models.Model):
     )
     image = models.ImageField('Image', blank=True)
     text = models.TextField('Recipe')
-    cooking_time = models.PositiveIntegerField('Cooking time')
+    cooking_time = models.PositiveIntegerField('Cooking time',
+                                               validators=[MinValueValidator(1)])
 
     class Meta:
         verbose_name = 'Recipe(s)'
@@ -78,7 +79,7 @@ class Recipe(models.Model):
         return f'{self.name}'
 
 
-class IngredientsCount(models.Model):
+class CountIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -89,7 +90,8 @@ class IngredientsCount(models.Model):
         on_delete=models.CASCADE,
         related_name='count_ingredients'
     )
-    amount = models.PositiveIntegerField('Amount')
+    amount = models.PositiveIntegerField('Amount',
+                                         validators=[MinValueValidator(1)])
 
     class Meta:
         verbose_name = 'Ingredient(s) amount in recipe'
@@ -141,6 +143,7 @@ class ShoppingCart(models.Model):
 
     class Meta:
         verbose_name = 'Shop list'
+        verbose_name_plural = 'Рецепты в списке покупок'
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],

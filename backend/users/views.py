@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.permissions import SAFE_METHODS, AllowAny
-from rest_framework import response
+from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 
 from users.models import Subscription, User
@@ -30,7 +30,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def me(self, request, *args, **kwargs):
         user = self.request.user
         user_data = UserSerializer(user)
-        return response.Response(user_data.data)
+        return Response(user_data.data)
 
 
 class ChangePasswordView(viewsets.ModelViewSet):
@@ -47,13 +47,13 @@ class ChangePasswordView(viewsets.ModelViewSet):
         if not self.object.check_password(
             serializer.validated_data.get("current_password")
         ):
-            return response.Response(
+            return Response(
                 {"current_password": ["wrong password."]},
                 status=status.HTTP_400_BAD_REQUEST
             )
         self.object.set_password(serializer.validated_data.get("new_password"))
         self.object.save()
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
@@ -79,4 +79,4 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             user=self.request.user
         )
         obj.delete()
-        return response.Response(status=HTTP_204_NO_CONTENT)
+        return Response(status=HTTP_204_NO_CONTENT)

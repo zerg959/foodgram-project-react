@@ -1,20 +1,14 @@
 from django.urls import include, path
-
 from rest_framework.routers import SimpleRouter
 
+from users.views import ChangePasswordView, SubscriptionViewSet, UserViewSet
 from .views import IngredientsViewSet, RecipesViewSet, TagsViewSet
-from users.views import UserViewSet
-
 
 router = SimpleRouter()
-router.register(r'recipes', RecipesViewSet, basename='recipes')
-router.register(r'ingredients', IngredientsViewSet, basename='ingredients')
-router.register(r'tags', TagsViewSet, basename='tags')
-router.register(r'users', UserViewSet, basename='users')
-# router.register(r'posts/(?P<post_id>\d+)/comments', CommentViewSet,
-#                 basename='comments')
-# router.register('ingredients', IngredientView, basename='ingredients')
-
+router.register(r'tags', TagsViewSet)
+router.register(r'ingredients', IngredientsViewSet)
+router.register(r'users', UserViewSet)
+router.register(r'recipes', RecipesViewSet)
 
 urlpatterns = [
     path('auth/', include('djoser.urls')),
@@ -22,7 +16,4 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('', include('djoser.urls.authtoken')),
     path('', include(router.urls)),
-    # path('users/set_password/', ChangePasswordView.as_view(
-    #     {'post': 'update'}), name='set_password'
-    #      ),
 ]

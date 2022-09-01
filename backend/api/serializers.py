@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
-from recipes.models import (IngredientsCount, Favorite, Ingredient, Recipe,
+from recipes.models import (CountIngredient, Favorite, Ingredient, Recipe,
                             ShoppingCart, Tag)
 from users.serializers import RecipeShortSerializer, UserSerializer
 
@@ -14,7 +14,7 @@ class IngredientsSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class IngredientsCountSerializer(serializers.ModelSerializer):
+class CountIngredientsSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='ingredient.id')
     name = serializers.CharField(source='ingredient.name')
     measurement_unit = serializers.CharField(
@@ -22,16 +22,16 @@ class IngredientsCountSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = IngredientsCount
+        model = CountIngredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
-class IngredientsCountCreateSerializer(serializers.ModelSerializer):
+class CountIngredientsCreateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     amount = serializers.FloatField()
 
     class Meta:
-        model = IngredientsCount
+        model = CountIngredient
         fields = ('id', 'amount')
 
 
@@ -43,8 +43,8 @@ class TagsSerializer(serializers.ModelSerializer):
 
 class RecipesSerializer(serializers.ModelSerializer):
     tags = TagsSerializer(many=True)
-    ingredients = IngredientsCountSerializer(
-        source='ingredientscount_set',
+    ingredients = CountIngredientsSerializer(
+        source='countingredient_set',
         many=True,
     )
     author = UserSerializer()
@@ -90,7 +90,7 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         many=True,
         queryset=Tag.objects.all(),
     )
-    ingredients = IngredientsCountCreateSerializer(many=True)
+    ingredients = CountIngredientsCreateSerializer(many=True)
     image = Base64ImageField()
     author = UserSerializer(read_only=True)
 
@@ -110,7 +110,7 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
     def validate_cooking_time(self, cooking_time):
         if int(cooking_time) < 1:
             raise serializers.ValidationError(
-                'Время приготовления не может быть меньше 1')
+                'Cooking time cant be < 1')
         return cooking_time
 
     def validation_unique(self, value, name):
@@ -118,28 +118,28 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         for item in value:
             if item in values_list:
                 raise serializers.ValidationError(
-                    f'Вы добавили несколько одинаковых {name}'
+                    f'You add same ingredients {name}'
                 )
             else:
                 values_list.append(item)
 
     def validate_ingredients(self, ingredients):
-        self.validation_unique(ingredients, 'ингредиента')
+        self.validation_unique(ingredients, 'ingredient(s)')
         if not ingredients:
             raise serializers.ValidationError(
-                'Укажите хотя бы один ингредиент')
+                'Your recipe is empty')
         for ingredient in ingredients:
             if int(ingredient.get('amount')) < 1:
                 raise serializers.ValidationError(
-                    'Количество ингредиента не может быть отрицательным'
+                    'Amount cant be Negative'
                 )
         return ingredients
 
     def validate_tags(self, tags):
-        self.validation_unique(tags, 'тега')
+        self.validation_unique(tags, 'tag(s)')
         if not tags:
             raise serializers.ValidationError(
-                'Укажите хотя бы один тэг')
+                'Tag(s) required')
         return tags
 
     def create_ingredients(self, ingredients, recipe):
@@ -149,13 +149,13 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
                 Ingredient,
                 pk=ingredient.get('id')
             )
-            item = IngredientsCount(
+            item = CountIngredient(
                 ingredient=ingredient_obj,
                 recipe=recipe,
                 amount=ingredient.get('amount')
             )
             obj.append(item)
-        IngredientsCount.objects.bulk_create(obj)
+        CountIngredient.objects.bulk_create(obj)
 
     def create(self, validated_data):
         tags = validated_data.pop('tags')

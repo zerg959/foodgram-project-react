@@ -33,17 +33,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CreateUserSerializer(serializers.ModelSerializer):
     """Create user Serializer"""
+
     class Meta:
         model = User
         fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'password'
+            'email', 'id', 'username', 'first_name', 'last_name', 'password'
         )
         extra_kwargs = {
+
             'password': {'write_only': True},
         }
 
@@ -55,13 +52,27 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
 
 class SubscriptionCreateSerializer(serializers.ModelSerializer):
-    user = serializers.HiddenField(
-        default=UserSerializer(read_only=True))
+    user = serializers.HiddenField(default=UserSerializer(read_only=True))
     author = UserSerializer(read_only=True)
 
     class Meta:
         model = Subscription
         fields = ('author', 'user')
+
+    def validate(self, data):
+        id_author = self.context['view'].kwargs['pk']
+        author = get_object_or_404(
+            User,
+            pk=id_author
+        )
+        user = self.context['request'].user
+        if author == user:
+            raise serializers.ValidationError(
+                {'errors': ['Нельзя подписаться на самого себя']})
+        if user.subscriptions.filter(author=author):
+            raise serializers.ValidationError(
+                {'errors': ['вы уже подписаны']})
+        return data
 
     def create(self, validated_data):
         id_author = self.context['view'].kwargs['pk']

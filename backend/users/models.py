@@ -14,9 +14,10 @@ ROLE_CHOICES = (
 class User(AbstractUser):
     """User model."""
     email = models.EmailField(
-        'email ',
+        'email пользователя',
+        blank=False,
         unique=True,
-        max_length=250,
+        max_length=254,
     )
     username = models.CharField(
         'username',
@@ -34,12 +35,12 @@ class User(AbstractUser):
         blank=True
     )
     role = models.CharField(
-        'User Role',
+        'Роль пользователя',
         max_length=max(len(role) for _, role in ROLE_CHOICES),
         choices=ROLE_CHOICES,
         default=ROLES.user,
     )
-    password = models.CharField('Password', max_length=150)
+    password = models.CharField('Пароль', max_length=150)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
