@@ -23,9 +23,9 @@ services:
   frontend:
     image:
       zerg959/foodgram_front:latest
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+#    build:
+#      context: ../frontend
+#      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
   nginx:
