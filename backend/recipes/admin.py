@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin, Group
-
+from django.contrib.auth.admin import Group, UserAdmin
 from users.forms import CustomUserCreationForm, PasswordChangeForm
 from users.models import Subscription, User
+
 from .models import (CountIngredient, Favorite, Ingredient, Recipe,
                      ShoppingCart, Tag)
 

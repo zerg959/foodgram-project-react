@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import UserViewSet, ChangePasswordView, SubscriptionViewSet
+from .views import ChangePasswordView, SubscriptionViewSet, UserViewSet
 
 app_name = 'users'
 
