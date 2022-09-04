@@ -130,3 +130,7 @@ dmypy.json
 
 # .idea
 .idea
+
+#files
+.ingredients_2.json
+.load_ingredients.py
