@@ -75,7 +75,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo SSH_KEY=${{ secrets.SSH_KEY }} >> .env
-            echo SSH_KEY=${{ secrets.PASSPHRASE }} >> .env
+            echo PASSPHRASE=${{ secrets.PASSPHRASE }} >> .env
             sudo docker-compose up -d --build
 
   send_message:

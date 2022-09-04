@@ -33,6 +33,7 @@ class UserAdmin(UserAdmin):
     ordering = ('id', 'email', 'username',)
     empty_value_display = '-none-'
 
+
 class RecipesAdmin(admin.ModelAdmin):
     list_filter = ('name', 'author', 'tags',)
     readonly_fields = ('added_in_favorites',)
@@ -41,18 +42,23 @@ class RecipesAdmin(admin.ModelAdmin):
     def added_in_favorites(self, obj):
         return obj.favorites.count()
 
+
 class IngredientAdmin(admin.ModelAdmin):
     list_filter = ('name',)
     empty_value_display = '-none-'
 
+
 class TagsAdmin(admin.ModelAdmin):
     empty_value_display = '-none-'
+
 
 class SubscriptionAdmin(admin.ModelAdmin):
     empty_value_display = '-none-'
 
+
 class FavoriteAdmin(admin.ModelAdmin):
     empty_value_display = '-none-'
+
 
 class CountIngredientAdmin(admin.ModelAdmin):
     empty_value_display = '-none-'

@@ -67,8 +67,9 @@ class Recipe(models.Model):
     )
     image = models.ImageField('Image', blank=True)
     text = models.TextField('Recipe')
-    cooking_time = models.PositiveIntegerField('Cooking time',
-                                               validators=[MinValueValidator(1)])
+    cooking_time = models.PositiveIntegerField(
+        'Cooking time',
+        validators=[MinValueValidator(1)])
 
     class Meta:
         verbose_name = 'Recipe(s)'
