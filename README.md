@@ -6,16 +6,16 @@
 ![yamdb workflow](https://github.com/zerg959/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 <br/>
 
-Проект развернут по адресу http://84.201.139.255
+Проект развернут по адресу http://84.201.139.255<br>
 
-админ zerg959@yandex.ru
-пароль 123zzzZZZ
+админ zerg959@yandex.ru<br>
+пароль 123zzzZZZ<br>
 
-Установите Docker и Docker-compose. Запустите сборку образов:
-sudo docker-compose up
+Установите Docker и Docker-compose. Запустите сборку образов:<br>
+sudo docker-compose up<br>
 или
-sudo docker-compose up -d --build
-После развертывания проекта создайте миграции и заполнените базу данных:
-sudo docker-compose exec python manage.py migrate
-sudo docker-compose exec python manage.py createsuperuser
+sudo docker-compose up -d --build<br>
+После развертывания проекта создайте миграции и заполнените базу данных:<br>
+sudo docker-compose exec python manage.py migrate<br>
+sudo docker-compose exec python manage.py createsuperuser<br>
 sudo docker-compose exec python manage.py collectstatic
