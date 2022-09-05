@@ -119,7 +119,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         url_path='download_shopping_cart',
         permission_classes=[IsAuthenticated]
     )
-    def load_shop_list(self, request):
+    def download_shopping_cart(self, request):
         buffer = io.BytesIO()
         page = canvas.Canvas(buffer)
         pdfmetrics.registerFont(TTFont('DejaVuSansMono', 'DejaVuSansMono.ttf'))
