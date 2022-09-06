@@ -126,7 +126,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=['GET'],
+        methods=['GET', ],
         url_path='download_shopping_cart',
         permission_classes=[IsAuthenticated, ]
     )
@@ -143,7 +143,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         filename = 'shopping_cart.txt'
         response = HttpResponse(shopping_cart, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
-        return
+        return response
 
 
 
