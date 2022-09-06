@@ -181,14 +181,6 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         instance.tags.set(tags)
         ingredients = validated_data.pop('ingredients')
-        # if not ingredients:
-        #     raise serializers.ValidationError(
-        #         'Your recipe is empty')
-        # for ingredient in ingredients:
-        #     if ingredient.amount < 1:
-        #         raise serializers.ValidationError(
-        #             'Amount cant be < 1'
-        #         )
         instance.ingredients.clear()
         self.create_ingredients(ingredients, instance)
         return super().update(
