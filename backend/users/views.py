@@ -53,10 +53,6 @@ class ChangePasswordView(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         self.object.set_password(serializer.validated_data.get("new_password"))
-        if serializer.validated_data.get("new_password") == serializer.validated_data.get("old_password"):
-            return Response(
-                {"new_password": ["new password cant be as same as old."]},
-                status=status.HTTP_400_BAD_REQUEST)
         self.object.save()
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
