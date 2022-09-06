@@ -126,28 +126,31 @@ class RecipesViewSet(viewsets.ModelViewSet):
         user = get_object_or_404(User, username=request.user)
         recipes_id = ShoppingCart.objects.filter(user=user).values('recipe')
         recipes = Recipe.objects.filter(pk__in=recipes_id)
-        shop_dict = {}
-        n_rec = 0
-        for recipe in recipes:
-            n_rec += 1
-            ing_amounts = CountIngredient.objects.filter(recipe=recipe)
-            for ing in ing_amounts:
-                if ing.ingredient.name in shop_dict:
-                    shop_dict[ing.ingredient.name][0] += ing.amount
-                else:
-                    shop_dict[ing.ingredient.name] = [
-                        ing.amount,
-                        ing.ingredient.measurement_unit
-                    ]
+        return len(recipes)
+        # shop_dict = {}
+        # n_rec = 0
+        # for recipe in recipes:
+        #     n_rec += 1
+        #     ing_amounts = CountIngredient.objects.filter(recipe=recipe)
+        #     for ing in ing_amounts:
+        #         if ing.ingredient.name in shop_dict:
+        #             shop_dict[ing.ingredient.name][0] += ing.amount
+        #         else:
+        #             shop_dict[ing.ingredient.name] = [
+        #                 ing.amount,
+        #                 ing.ingredient.measurement_unit
+        #             ]
+        #
+        # shop_string = (
+        #     f'FoodGram\nВыбрано рецептов: {n_rec}\
+        #     \nСписок покупок:\
+        #     \n-------------------'
+        # )
+        # for key, value in shop_dict.items():
+        #     shop_string += f'\n{key} ({value[1]}) - {str(value[0])}'
+        # return HttpResponse(shop_string, content_type='text/plain')
 
-        shop_string = (
-            f'FoodGram\nВыбрано рецептов: {n_rec}\
-            \nСписок покупок:\
-            \n-------------------'
-        )
-        for key, value in shop_dict.items():
-            shop_string += f'\n{key} ({value[1]}) - {str(value[0])}'
-        return HttpResponse(shop_string, content_type='text/plain')
+
         # buffer = io.BytesIO()
         # page = canvas.Canvas(buffer)
         # pdfmetrics.registerFont(TTFont('Courier', 'Courier.ttf'))
