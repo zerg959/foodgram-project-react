@@ -20,6 +20,7 @@ from .filters import IngredientSearchFilter, RecipeFilter
 from .pagination import CustomPagination
 from .permissions import AuthorOrReadOnly
 from recipes.models import Recipe, CountIngredient, ShoppingCart
+from users.models import User
 from .serializers import (FavoriteSerializer, IngredientsSerializer,
                           RecipesCreateSerializer, RecipesSerializer,
                           ShoppingCartSerializer, TagsSerializer)
