@@ -49,7 +49,7 @@ class ChangePasswordView(viewsets.ModelViewSet):
             serializer.validated_data.get("current_password")
         ):
             return Response(
-                {"current_password": ["wrong password."]},
+                {"current_password": ["Wrong password"]},
                 status=status.HTTP_400_BAD_REQUEST
             )
         self.object.set_password(serializer.validated_data.get("new_password"))

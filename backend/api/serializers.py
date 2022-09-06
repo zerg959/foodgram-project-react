@@ -29,6 +29,12 @@ class CountIngredientsCreateSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     amount = serializers.FloatField()
 
+    def amount(self, amount):
+        if int(amount) < 1:
+            raise serializers.ValidationError(
+                'Amount cant be < 1')
+        return amount
+
     class Meta:
         model = CountIngredient
         fields = ('id', 'amount')
@@ -112,6 +118,12 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
                 'Cooking time cant be < 1')
         return cooking_time
 
+    # def validate_cooking_time(self, cooking_time):
+    #     if int(cooking_time) < 1:
+    #         raise serializers.ValidationError(
+    #             'Cooking time cant be < 1')
+    #     return cooking_time
+
     def validation_unique(self, value, name):
         values_list = []
         for item in value:
@@ -130,7 +142,7 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             if int(ingredient.get('amount')) < 1:
                 raise serializers.ValidationError(
-                    'Amount cant be Negative'
+                    'Amount cant be < 1>'
                 )
         return ingredients
 
@@ -169,6 +181,14 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         instance.tags.set(tags)
         ingredients = validated_data.pop('ingredients')
+        if not ingredients:
+            raise serializers.ValidationError(
+                'Your recipe is empty')
+        for ingredient in ingredients:
+            if ingredient.amount < 1:
+                raise serializers.ValidationError(
+                    'Amount cant be < 1'
+                )
         instance.ingredients.clear()
         self.create_ingredients(ingredients, instance)
         return super().update(
