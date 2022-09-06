@@ -109,10 +109,3 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_new_password(self, new_password):
         password_validation.validate_password(new_password, self.instance)
         return new_password
-
-    def password_changed(self, new_password, user=None):
-        password_validation.password_changed(new_password, user)
-        return new_password
-
-
-
