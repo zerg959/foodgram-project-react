@@ -106,11 +106,11 @@ class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
 
-    def validate_same_password(self, current_password, new_password):
-        if new_password == current_password:
-            raise ValueError('New password cant be as same as old')
-        return current_password
-
-    def validate_new_password(self, new_password):
-        password_validation.validate_password(new_password, self.instance)
-        return new_password
+    # def validate_same_password(self, current_password, new_password):
+    #     if new_password == current_password:
+    #         raise ValueError('New password cant be as same as old')
+    #     return current_password
+    #
+    # def validate_new_password(self, new_password):
+    #     password_validation.validate_password(new_password, self.instance)
+    #     return new_password
