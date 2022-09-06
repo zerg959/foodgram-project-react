@@ -43,7 +43,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, ]
     queryset = Recipe.objects.all()
     serializer_class = RecipesSerializer
-    permission_classes = [AuthorOrReadOnly, ]
+    # permission_classes = [AuthorOrReadOnly, ]
     pagination_class = CustomPagination
 
     def get_queryset(self):
@@ -120,7 +120,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=['GET'],
         url_path='download_shopping_cart',
-        # permission_classes=[IsAuthenticatedOrReadOnly, ]
+        permission_classes=[IsAuthenticatedOrReadOnly, ]
     )
     def download_shopping_cart(self, request):
         user = get_object_or_404(User, username=request.user)
