@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import password_validation
 from django.shortcuts import get_object_or_404
 from recipes.models import Recipe
 from rest_framework import serializers
@@ -104,3 +105,7 @@ class PasswordChangeSerializer(serializers.Serializer):
     model = User
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, new_password):
+        password_validation.validate_password(new_password, self.instance)
+        return new_password
