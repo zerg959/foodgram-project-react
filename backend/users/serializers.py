@@ -86,7 +86,6 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
-    pagination_class = CustomPagination
 
     class Meta:
         model = Recipe
