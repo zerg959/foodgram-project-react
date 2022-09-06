@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from recipes.models import Recipe
 from rest_framework import serializers
 from users.models import Subscription, User
+from users.pagination import CustomPagination
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -85,6 +86,8 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
+    pagination_class = CustomPagination
+
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time',)
