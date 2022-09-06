@@ -131,7 +131,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
             .order_by(self.path_name).annotate(total=Sum(self.path_amount))
         )
         shopping_cart = (
-            f'{"\n---------Foodgram Shop List----------"}'
+            f'{"---------Foodgram Shop List----------"}'
         )
         for ingredient in ingredients:
             shopping_cart += f'\n{ingredient[self.path_name]} ' \
