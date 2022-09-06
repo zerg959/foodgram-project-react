@@ -32,12 +32,14 @@ class TagsViewSet(viewsets.ModelViewSet):
     pagination_class = None
     serializer_class = TagsSerializer
 
+
 class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     pagination_class = None
     serializer_class = IngredientsSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, ]
     filterset_class = IngredientSearchFilter
+
 
 class RecipesViewSet(viewsets.ModelViewSet):
     path_name = 'recipe__ingredients__name'
@@ -122,12 +124,12 @@ class RecipesViewSet(viewsets.ModelViewSet):
             serializer=ShoppingCartSerializer()
         )
 
-    @action(
-        detail=False,
-        methods=['GET'],
-        url_path='download_shopping_cart',
-        permission_classes=[IsAuthenticated, ]
-    )
+    # @action(
+    #     detail=False,
+    #     methods=['GET'],
+    #     url_path='download_shopping_cart',
+    #     permission_classes=[IsAuthenticated, ]
+    # )
     def download_shopping_cart(self, request):
         ingredients = CountIngredient.objects.filter(
             recipe__shopping_carts__user=request.user).values(
