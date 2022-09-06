@@ -1,5 +1,4 @@
 from django.urls import include, path
-from django.views.generic import TemplateView
 from rest_framework.routers import SimpleRouter
 from users.views import UserViewSet
 
@@ -14,10 +13,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
     path('users/', include('users.urls')),
-    path(
-        'redoc/',
-        TemplateView.as_view(template_name='redoc.html'),
-        name='redoc'),
     path('', include('djoser.urls.authtoken')),
     path('', include(router.urls)),
 ]
