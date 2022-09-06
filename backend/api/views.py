@@ -1,15 +1,13 @@
-from django.db.models.expressions import Exists, OuterRef, Value
 from django.db.models import Sum
+from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import (CountIngredient, Favorite, Ingredient, Recipe,
                             ShoppingCart, Tag)
-from users.models import User
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (SAFE_METHODS, AllowAny,
-                                        IsAuthenticated,
+from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
@@ -125,7 +123,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
         url_path='download_shopping_cart',
         permission_classes=[IsAuthenticated, ]
     )
-
     def download_shopping_cart(self, request):
         ingredients = (
             request.user.shopping_cart.values(
@@ -134,36 +131,13 @@ class RecipesViewSet(viewsets.ModelViewSet):
             .order_by(self.path_name).annotate(total=Sum(self.path_amount))
         )
         shopping_cart = (
-            f'\n-------------------'
+            f'{"\n---------Foodgram Shop List----------"}'
         )
         for ingredient in ingredients:
             shopping_cart += f'\n{ingredient[self.path_name]} ' \
                               f'({ingredient[self.path_measurement_unit]}) ' \
                               f'- {ingredient["total"]}'
-
-
         filename = 'shopping_cart.txt'
         response = HttpResponse(shopping_cart, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
-
-
-
-
-
-
-
-
-        # ingredients = CountIngredient.objects.filter(
-        #     recipe__shopping_cart__user=request.user).values(
-        #     'ingredient__name', 'ingredient__measurement_unit', 'amount'
-        # )
-        # shopping_cart = '\n'.join([
-        #     f'{ingredient["ingredient__name"]} - {ingredient["amount"]} '
-        #     f'{ingredient["ingredient__measurement_unit"]}'
-        #     for ingredient in ingredients
-        # ])
-        # filename = 'shopping_cart.txt'
-        # response = HttpResponse(shopping_cart, content_type='text/plain')
-        # response['Content-Disposition'] = f'attachment; filename={filename}'
-        # return response

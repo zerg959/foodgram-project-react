@@ -98,12 +98,12 @@ class CountIngredient(models.Model):
     )
     amount = models.PositiveIntegerField('Amount',
                                          validators=[MinValueValidator(1)])
+
     def amount_validator(self, amount):
         if amount < 1:
             raise ValueError(
                 'Amount cant be < 1'
             )
-
 
     class Meta:
         verbose_name = 'Ingredient(s) amount in recipe'
