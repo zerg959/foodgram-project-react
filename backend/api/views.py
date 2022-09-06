@@ -1,26 +1,21 @@
-import io
-
+from django.db.models.expressions import Exists, OuterRef, Value
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.db.models.expressions import Exists, OuterRef, Value
-from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
+from recipes.models import (CountIngredient, Favorite, Ingredient, Recipe,
+                            ShoppingCart, Tag)
+from users.models import User
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (SAFE_METHODS, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly, AllowAny)
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
 from .filters import IngredientSearchFilter, RecipeFilter
 from .pagination import CustomPagination
 from .permissions import AuthorOrReadOnly
-from recipes.models import Recipe, CountIngredient, ShoppingCart
-from users.models import User
 from .serializers import (FavoriteSerializer, IngredientsSerializer,
                           RecipesCreateSerializer, RecipesSerializer,
                           ShoppingCartSerializer, TagsSerializer)
@@ -51,7 +46,7 @@ class RecipesViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, ]
     queryset = Recipe.objects.all()
     serializer_class = RecipesSerializer
-    # permission_classes = [AuthorOrReadOnly, ]
+    permission_classes = [AuthorOrReadOnly, ]
     pagination_class = CustomPagination
 
     def get_queryset(self):
@@ -132,15 +127,21 @@ class RecipesViewSet(viewsets.ModelViewSet):
     )
 
     def download_shopping_cart(self, request):
-        ingredients = CountIngredient.objects.filter(
-            recipe__shopping_cart__user=request.user).values(
-            'ingredient__name', 'ingredient__measurement_unit', 'amount'
+        ingredients = (
+            request.user.shopping_cart.values(
+                self.path_name,
+                self.path_measurement_unit)
+            .order_by(self.path_name).annotate(total=Sum(self.path_amount))
         )
-        shopping_cart = '\n'.join([
-            f'{ingredient["ingredient__name"]} - {ingredient["amount"]} '
-            f'{ingredient["ingredient__measurement_unit"]}'
-            for ingredient in ingredients
-        ])
+        shopping_cart = (
+            f'\n-------------------'
+        )
+        for ingredient in ingredients:
+            shopping_cart += f'\n{ingredient[self.path_name]} ' \
+                              f'({ingredient[self.path_measurement_unit]}) ' \
+                              f'- {ingredient["total"]}'
+
+
         filename = 'shopping_cart.txt'
         response = HttpResponse(shopping_cart, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
@@ -150,65 +151,19 @@ class RecipesViewSet(viewsets.ModelViewSet):
 
 
 
-    # def download_shopping_cart(self, request):
-    #     user = get_object_or_404(User, username=request.user)
-    #     recipes_id = ShoppingCart.objects.filter(user=user).values('recipe')
-    #     recipes = Recipe.objects.filter(pk__in=recipes_id)
-    #     shop_dict = {}
-    #     n_rec = 0
-    #     for recipe in recipes:
-    #         n_rec += 1
-    #         ing_amounts = CountIngredient.objects.filter(recipe=recipe)
-    #         for ing in ing_amounts:
-    #             if ing.ingredient.name in shop_dict:
-    #                 shop_dict[ing.ingredient.name][0] += ing.amount
-    #             else:
-    #                 shop_dict[ing.ingredient.name] = [
-    #                     ing.amount,
-    #                     ing.ingredient.measurement_unit
-    #                 ]
-    #
-    #     shop_string = (
-    #         f'FoodGram\nВыбрано рецептов: {n_rec}\
-    #         \nСписок покупок:\
-    #         \n-------------------'
-    #     )
-    #     for key, value in shop_dict.items():
-    #         shop_string += f'\n{key} ({value[1]}) - {str(value[0])}'
-    #     return HttpResponse(shop_string, content_type='text/plain')
 
 
-        # buffer = io.BytesIO()
-        # page = canvas.Canvas(buffer)
-        # pdfmetrics.registerFont(TTFont('Courier', 'Courier.ttf'))
-        # page.setFont('Courier', 14)
-        # x_position = 50
-        # y_position = 800
-        # ingredients = (
-        #     request.user.shopping_cart.values(
-        #         self.path_name,
-        #         self.path_measurement_unit)
-        #     .order_by(self.path_name).annotate(total=Sum(self.path_amount))
+
+        # ingredients = CountIngredient.objects.filter(
+        #     recipe__shopping_cart__user=request.user).values(
+        #     'ingredient__name', 'ingredient__measurement_unit', 'amount'
         # )
-        # indent = 20
-        # page.drawString(x_position, y_position, 'Shop list:')
-        # for ingredient in ingredients:
-        #     page.drawString(
-        #         x_position, y_position - indent,
-        #         f'{ingredient[self.path_name]}'
-        #         f' ({ingredient[self.path_measurement_unit]})'
-        #         f' — {ingredient["total"]}')
-        #     y_position -= 15
-        #     if y_position <= 50:
-        #         page.showPage()
-        #         y_position = 800
-        # page.setFont('Courier', 14)
-        # page.save()
-        # buffer.seek(0)
-        # return FileResponse(
-        #     buffer, as_attachment=True, filename='shopping_cart.pdf'
-        # )
-
-
-
-
+        # shopping_cart = '\n'.join([
+        #     f'{ingredient["ingredient__name"]} - {ingredient["amount"]} '
+        #     f'{ingredient["ingredient__measurement_unit"]}'
+        #     for ingredient in ingredients
+        # ])
+        # filename = 'shopping_cart.txt'
+        # response = HttpResponse(shopping_cart, content_type='text/plain')
+        # response['Content-Disposition'] = f'attachment; filename={filename}'
+        # return response

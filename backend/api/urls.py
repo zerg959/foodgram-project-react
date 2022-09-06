@@ -1,9 +1,9 @@
 from django.urls import include, path
+from django.views.generic import TemplateView
 from rest_framework.routers import SimpleRouter
 from users.views import UserViewSet
 
 from .views import IngredientsViewSet, RecipesViewSet, TagsViewSet
-from django.views.generic import TemplateView
 
 router = SimpleRouter()
 router.register(r'tags', TagsViewSet)
