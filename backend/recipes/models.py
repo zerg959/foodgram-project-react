@@ -71,6 +71,12 @@ class Recipe(models.Model):
         'Cooking time',
         validators=[MinValueValidator(1)])
 
+    def ingredients_validator(self, ingredients):
+        if not ingredients:
+            raise ValueError(
+                'ingredients list cant be empty'
+            )
+
     class Meta:
         verbose_name = 'Recipe(s)'
         ordering = ('-pk',)
