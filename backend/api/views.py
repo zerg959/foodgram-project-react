@@ -1,3 +1,4 @@
+import csv
 from django.db.models import Sum
 from django.db.models.expressions import Exists, OuterRef, Value
 from django.http import HttpResponse
@@ -137,8 +138,8 @@ class RecipesViewSet(viewsets.ModelViewSet):
             shopping_cart += (f'\n{ingredient[self.path_name]} '
                               f'({ingredient[self.path_measurement_unit]})'
                               f' - {ingredient["total"]}')
-        filename = 'shopping_cart.txt'
-        response = HttpResponse(shopping_cart, content_type='text/plain')
-        response.write(u'\ufeff'.encode('utf8'))
+        filename = 'shopping_cart.csv'
+        response = HttpResponse(shopping_cart, content_type='text/csv')
         response['Content-Disposition'] = f'attachment; filename={filename}'
+        response.write(u'\ufeff'.encode('utf8'))
         return response
