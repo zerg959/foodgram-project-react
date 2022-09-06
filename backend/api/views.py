@@ -134,9 +134,9 @@ class RecipesViewSet(viewsets.ModelViewSet):
             f'{"---------Foodgram Shop List----------"}'
         )
         for ingredient in ingredients:
-            shopping_cart += f'\n{ingredient[self.path_name]} ' \
-                              f'({ingredient[self.path_measurement_unit]}) ' \
-                              f'- {ingredient["total"]}'
+            shopping_cart += (f'\n{ingredient[self.path_name]} '
+                              f'({ingredient[self.path_measurement_unit]})'
+                              f' - {ingredient["total"]}')
         filename = 'shopping_cart.txt'
         response = HttpResponse(shopping_cart, content_type='text/plain')
         response['Content-Disposition'] = f'attachment; filename={filename}'
