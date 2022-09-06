@@ -124,12 +124,12 @@ class RecipesViewSet(viewsets.ModelViewSet):
             serializer=ShoppingCartSerializer()
         )
 
-    # @action(
-    #     detail=False,
-    #     methods=['GET'],
-    #     url_path='download_shopping_cart',
-    #     permission_classes=[IsAuthenticated, ]
-    # )
+    @action(
+        detail=False,
+        methods=['GET'],
+        url_path='download_shopping_cart',
+        permission_classes=[IsAuthenticated, ]
+    )
     def download_shopping_cart(self, request):
         ingredients = CountIngredient.objects.filter(
             recipe__shopping_carts__user=request.user).values(
