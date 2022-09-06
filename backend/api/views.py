@@ -139,6 +139,6 @@ class RecipesViewSet(viewsets.ModelViewSet):
                               f' - {ingredient["total"]}')
         filename = 'shopping_cart.txt'
         response = HttpResponse(shopping_cart, content_type='text/plain')
-        response['Content-Disposition'] = f'attachment; filename={filename}'
         response.write(u'\ufeff'.encode('utf8'))
+        response['Content-Disposition'] = f'attachment; filename={filename}'
         return response
