@@ -118,6 +118,12 @@ class RecipesCreateSerializer(serializers.ModelSerializer):
                 'Cooking time cant be < 1')
         return cooking_time
 
+    # def validate_cooking_time(self, cooking_time):
+    #     if int(cooking_time) < 1:
+    #         raise serializers.ValidationError(
+    #             'Cooking time cant be < 1')
+    #     return cooking_time
+
     def validation_unique(self, value, name):
         values_list = []
         for item in value:
