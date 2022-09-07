@@ -59,7 +59,7 @@ class ChangePasswordView(viewsets.ModelViewSet):
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
     """Subscription viewset"""
-    pagination_class = CustomPagination
+    # pagination_class = CustomPagination
 
     def get_queryset(self):
         return User.objects.filter(subs__user=self.request.user)
