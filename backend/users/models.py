@@ -1,4 +1,3 @@
-from django.conf import settings
 from collections import namedtuple
 
 from django.contrib.auth.models import AbstractUser
@@ -58,14 +57,12 @@ class User(AbstractUser):
 
 class Subscription(models.Model):
     user = models.ForeignKey(
-        # User,
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='subscriptions'
     )
     author = models.ForeignKey(
-        # User,
-        settings.AUTH_USER_MODEL,
+        User,
         on_delete=models.CASCADE,
         related_name='subs')
 
@@ -77,6 +74,3 @@ class Subscription(models.Model):
                 name='unique_subscribe'
             )
         ]
-
-    def __str__(self):
-        return f'{self.user} - {self.author}'

@@ -1,15 +1,14 @@
+from api.pagination import CustomPagination
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
-from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
+from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
-
-from api.pagination import CustomPagination
 from users.models import Subscription, User
 
 from .serializers import (CreateUserSerializer, PasswordChangeSerializer,
-                          RecipeShortSerializer, SubscriptionCreateSerializer,
-                          SubscriptionSerializer, UserSerializer)
+                          SubscriptionCreateSerializer, SubscriptionSerializer,
+                          UserSerializer)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,7 +60,6 @@ class ChangePasswordView(viewsets.ModelViewSet):
 class SubscriptionViewSet(viewsets.ModelViewSet):
     """Subscription viewset"""
     pagination_class = CustomPagination
-    serializer_class = SubscriptionSerializer
 
     def get_queryset(self):
         return User.objects.filter(subs__user=self.request.user)

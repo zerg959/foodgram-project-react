@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404
 from recipes.models import Recipe
 from rest_framework import serializers
 from users.models import Subscription, User
-from api.serializers import RecipeSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -86,7 +85,6 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time',)
