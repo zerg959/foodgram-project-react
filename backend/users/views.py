@@ -74,7 +74,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         # )
         # if recipes_limit:
         #     recipes = recipes[:int(recipes_limit)]
-        return RecipeShortSerializer(recipes, many=True)[.data
+        return RecipeShortSerializer(recipes, many=True).data
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
