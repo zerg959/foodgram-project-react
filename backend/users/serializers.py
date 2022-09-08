@@ -1,5 +1,6 @@
 from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
@@ -120,4 +121,5 @@ class PasswordChangeSerializer(serializers.Serializer):
 
     def validate_new_password(self, new_password):
         password_validation.validate_password(new_password, self.instance)
+        messages.success(new_password, 'Password changed successfully!')
         return new_password
