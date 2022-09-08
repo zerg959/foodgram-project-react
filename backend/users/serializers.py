@@ -85,10 +85,6 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
-    result = Recipe.objects.all()[:3]
-
-    def get_queryset(self):
-        return result
 
     class Meta:
         model = Recipe
