@@ -68,7 +68,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         # return Subscription.object(
         #     subscriptions=user).select_related('subscriptions)'
         # )
-        return User.objects.filter(subs__user=self.request.user)
+        return User.objects.filter(subs__user=self.request.user)[:3]
 
     # def get_recipes(self, author):
     #     recipes = author.recipes.all()
