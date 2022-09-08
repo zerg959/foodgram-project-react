@@ -8,7 +8,7 @@ from users.models import Subscription, User
 
 from .serializers import (CreateUserSerializer, PasswordChangeSerializer,
                           SubscriptionCreateSerializer, SubscriptionSerializer,
-                          UserSerializer)
+                          RecipeShortSerializer, UserSerializer)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -60,20 +60,20 @@ class ChangePasswordView(viewsets.ModelViewSet):
 class SubscriptionViewSet(viewsets.ModelViewSet):
     """Subscription viewset"""
     pagination_class = CustomPagination
-    # serializer_class = SubscriptionSerializer
+    serializer_class = SubscriptionSerializer
     # permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
         return User.objects.filter(subs__user=self.request.user)
 
-    # def get_recipes(self, author):
-    #     recipes = author.recipes.all()
-    #     recipes_limit = self.context.get('request').query_params.get(
-    #         'recipes_limit'
-    #     )
-    #     if recipes_limit:
-    #         recipes = recipes[:int(recipes_limit)]
-    #     return RecipeMinifiedSerializer(recipes, many=True).data
+    def get_recipes(self, name):
+        recipes = name.recipes.all()
+        recipes_limit = self.context.get('request').query_params.get(
+            'recipes_limit'
+        )
+        if recipes_limit:
+            recipes = recipes[:int(recipes_limit)]
+        return RecipeShortSerializer(recipes, many=True).data
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
