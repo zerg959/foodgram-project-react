@@ -105,7 +105,8 @@ class SubscriptionSerializer(UserSerializer):
         request = self.context.get('request')
         recipes_limit = request.query_params.get('recipes_limit')
         if recipes_limit:
-            recipes = Recipe.objects.filter(author=obj).all()[:(int(recipes_limit))]
+            recipes = Recipe.objects.filter(
+                author=obj).all()[:(int(recipes_limit))]
         else:
             recipes = Recipe.objects.filter(author=obj).all()
         context = {'request': request}
