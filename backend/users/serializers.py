@@ -102,10 +102,6 @@ class SubscriptionSerializer(UserSerializer):
     def get_recipes_count(self, obj):
         return obj.recipes.count()
 
-    def get_recipes(self, obj):
-        recipes = obj.subs.recipes.all()[:3]
-        return RecipeShortSerializer(recipes, many=True).data
-
 
 class PasswordChangeSerializer(serializers.Serializer):
     model = User
