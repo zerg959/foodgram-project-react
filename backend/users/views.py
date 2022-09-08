@@ -1,7 +1,7 @@
 from api.pagination import CustomPagination
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
-from rest_framework.permissions import SAFE_METHODS, AllowAny
+from rest_framework.permissions import SAFE_METHODS, AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from users.models import Subscription, User
@@ -59,10 +59,25 @@ class ChangePasswordView(viewsets.ModelViewSet):
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
     """Subscription viewset"""
-    pagination_class = CustomPagination
+    # pagination_class = CustomPagination
+    serializer_class = SubscriptionSerializer
+    permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
+        # user = self.request.user
+        # return Subscription.object(
+        #     subscriptions=user).select_related('subscriptions)'
+        # )
         return User.objects.filter(subs__user=self.request.user)
+
+    # def get_recipes(self, author):
+    #     recipes = author.recipes.all()
+    #     recipes_limit = self.context.get('request').query_params.get(
+    #         'recipes_limit'
+    #     )
+    #     if recipes_limit:
+    #         recipes = recipes[:int(recipes_limit)]
+    #     return RecipeMinifiedSerializer(recipes, many=True).data
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:

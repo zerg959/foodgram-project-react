@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404
 from recipes.models import Recipe
 from rest_framework import serializers
 from users.models import Subscription, User
-from api.pagination import SubPagination
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -86,7 +85,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
-    pagination_class = SubPagination
+
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time',)
@@ -101,6 +100,19 @@ class SubscriptionSerializer(UserSerializer):
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
+
+    def get_recipes(self, obj):
+        recipes = obj.subs.recipes.all()[:3]
+        return RecipeShortSerializer(recipes, many=True).data
+
+    # def get_recipes(self, author):
+    #     recipes = author.recipes.all()
+    #     recipes_limit = self.context.get('request').query_params.get(
+    #         'recipes_limit'
+    #     )
+    #     if recipes_limit:
+    #         recipes = recipes[:int(recipes_limit)]
+    #     return RecipeMinifiedSerializer(recipes, many=True).data
 
 
 class PasswordChangeSerializer(serializers.Serializer):
