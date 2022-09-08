@@ -64,7 +64,7 @@ class ChangePasswordView(viewsets.ModelViewSet):
                 'message': 'Password changed successfully',
                 'data': []
             }
-            return Response(response)
+            return Response(response, response['message'])
         return Response(
             serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
