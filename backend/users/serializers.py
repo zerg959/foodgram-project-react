@@ -102,8 +102,8 @@ class SubscriptionSerializer(UserSerializer):
 # _____
 
     def get_recipes(self, obj):
-        recipes = obj.subs.recipes.all()[:3]
-        return RecipeShortSerializer(recipes, many=True).data
+        recipes = Recipe.objects.filter(author=obj)
+        return RecipeShortSerializer(recipes[:3], many=True).data
 # ______
 
 
