@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import Group, UserAdmin
+
 from users.forms import CustomUserCreationForm, PasswordChangeForm
 from users.models import Subscription, User
 

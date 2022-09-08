@@ -1,8 +1,9 @@
 from django.contrib.auth import password_validation
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
-from recipes.models import Recipe
 from rest_framework import serializers
+
+from recipes.models import Recipe
 from users.models import Subscription, User
 
 
@@ -91,20 +92,24 @@ class RecipeShortSerializer(serializers.ModelSerializer):
 
 
 class SubscriptionSerializer(UserSerializer):
-    recipes = RecipeShortSerializer(many=True)
-    recipes_count = serializers.SerializerMethodField()
+    recipes = serializers.SerializerMethodField(read_only=True)
+    recipes_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('recipes', 'recipes_count',)
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
-# _____
 
     def get_recipes(self, obj):
-        recipes = Recipe.objects.filter(author=obj)
-        return RecipeShortSerializer(recipes[:3], many=True).data
-# ______
+        request = self.context.get('request')
+        recipes_limit = request.query_params.get('recipes_limit')
+        if recipes_limit:
+            recipes = Recipe.objects.filter(author=obj).all()[:(int(recipes_limit))]
+        else:
+            recipes = Recipe.objects.filter(author=obj).all()
+        context = {'request': request}
+        return RecipeShortSerializer(recipes, many=True, context=context).data
 
 
 class PasswordChangeSerializer(serializers.Serializer):
