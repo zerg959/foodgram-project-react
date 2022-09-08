@@ -64,11 +64,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
-        # user = self.request.user
-        # return Subscription.object(
-        #     subscriptions=user).select_related('subscriptions)'
-        # )
-        return User.objects.filter(subs__user=self.request.user)[:3]
+        return User.objects.filter(subs__user=self.request.user)
 
     # def get_recipes(self, author):
     #     recipes = author.recipes.all()
