@@ -64,9 +64,10 @@ class ChangePasswordView(viewsets.ModelViewSet):
                 'message': 'Password changed successfully',
                 'data': []
             }
-            return Response(response, response['message'])
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(response)
+        return Response({"success": "Password updated successfully."})
+        # return Response(
+        #     serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
