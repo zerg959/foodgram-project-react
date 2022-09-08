@@ -59,9 +59,9 @@ class ChangePasswordView(viewsets.ModelViewSet):
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
     """Subscription viewset"""
-    # pagination_class = CustomPagination
-    serializer_class = SubscriptionSerializer
-    permission_classes = [IsAuthenticated, ]
+    pagination_class = CustomPagination
+    # serializer_class = SubscriptionSerializer
+    # permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
         # user = self.request.user
