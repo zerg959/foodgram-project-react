@@ -3,6 +3,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
+from django.contrib import messages
 
 from api.pagination import CustomPagination
 from users.models import Subscription, User
@@ -53,15 +54,10 @@ class ChangePasswordView(viewsets.ModelViewSet):
                 {"current_password": ["Wrong password"]},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        if self.object.set_password(
-                serializer.validated_data.get("new_password")):
-            return Response(
-                {"new_password": ["Password changed successfully."]},
-                status=status.HTTP_200_OK
-            )
-
+        self.object.set_password(serializer.validated_data.get("new_password"))
         self.object.save()
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return messages.success(request, 'Password changed successfully!')
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SubscriptionViewSet(viewsets.ModelViewSet):
