@@ -85,12 +85,14 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
-    results = Recipe.objects.all()[:3]
+    result = Recipe.objects.all()[:3]
+
+    def get_queryset(self):
+        return result
 
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time',)
-    return results
 
 
 class SubscriptionSerializer(UserSerializer):
