@@ -69,10 +69,10 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if author == user:
             raise serializers.ValidationError(
-                {'errors': ['Нельзя подписаться на самого себя']})
+                {'errors': ['Cant subscribe on yourself']})
         if user.subscriptions.filter(author=author):
             raise serializers.ValidationError(
-                {'errors': ['вы уже подписаны']})
+                {'errors': ['Subscription already exists']})
         return data
 
     def create(self, validated_data):
