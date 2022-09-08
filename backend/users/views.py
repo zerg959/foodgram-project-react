@@ -62,19 +62,9 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     """Subscription viewset"""
     pagination_class = CustomPagination
     serializer_class = SubscriptionSerializer
-    # permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
         return User.objects.filter(subs__user=self.request.user)
-
-    # def get_recipes(self, name):
-    #     recipes = name.recipes.all()[:3]
-        # recipes_limit = self.context.get('request').query_params.get(
-        #     'recipes_limit'
-        # )
-        # if recipes_limit:
-        #     recipes = recipes[:int(recipes_limit)]
-        # return RecipeShortSerializer(recipes[:3], many=True).data
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:

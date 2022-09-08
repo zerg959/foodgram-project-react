@@ -98,6 +98,9 @@ class SubscriptionSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('recipes', 'recipes_count',)
 
+    def get_recipes_queryset(self, obj):
+        return obj.recipes.all()[:3]
+
     def get_recipes_count(self, obj):
         return obj.recipes.count()
 
