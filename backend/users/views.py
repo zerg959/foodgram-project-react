@@ -8,6 +8,7 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 from api.pagination import CustomPagination
 from users.models import Subscription, User
 
+from .forms import import PasswordChangeForm
 from .serializers import (CreateUserSerializer, PasswordChangeSerializer,
                           SubscriptionCreateSerializer, SubscriptionSerializer,
                           UserSerializer)
@@ -38,6 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class ChangePasswordView(viewsets.ModelViewSet):
     serializer_class = PasswordChangeSerializer
     model = User
+    form_class = PasswordChangeForm
 
     def get_object(self):
         return self.request.user
@@ -58,14 +60,8 @@ class ChangePasswordView(viewsets.ModelViewSet):
             self.object.set_password(
                 serializer.validated_data.get("new_password"))
             self.object.save()
-            # response = {
-            #     'status': 'success',
-            #     'code': status.HTTP_200_OK,
-            #     'message': 'Password changed successfully',
-            #     'data': []
-            # }
-            return Response({"success": "Password updated successfully."})
-        # return Response({"success": "Password updated successfully."})
+            messages.success(self.request, "Your password has been changed.")
+
         return Response(
             serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
