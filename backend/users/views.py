@@ -1,9 +1,7 @@
-from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
-from django.http import HttpResponse
 from rest_framework.status import HTTP_204_NO_CONTENT
 
 from api.pagination import CustomPagination
@@ -46,7 +44,6 @@ class ChangePasswordView(viewsets.ModelViewSet):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
-        messages.success(request, 'Success')
         self.object = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -62,6 +59,13 @@ class ChangePasswordView(viewsets.ModelViewSet):
             self.object.set_password(
                 serializer.validated_data.get("new_password"))
             self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password changed successfully',
+                'data': []
+            }
+            return Response(response)
         return Response(
             serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
