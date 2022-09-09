@@ -8,7 +8,7 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 from api.pagination import CustomPagination
 from users.models import Subscription, User
 
-from .forms import import PasswordChangeForm
+from .forms import PasswordChangeForm
 from .serializers import (CreateUserSerializer, PasswordChangeSerializer,
                           SubscriptionCreateSerializer, SubscriptionSerializer,
                           UserSerializer)
