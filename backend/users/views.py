@@ -61,7 +61,6 @@ class ChangePasswordView(viewsets.ModelViewSet):
             self.object.set_password(
                 serializer.validated_data.get("new_password"))
             self.object.save()
-            return HttpResponse("Password updated")
         return Response(
             serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
