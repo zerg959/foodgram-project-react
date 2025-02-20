@@ -5,7 +5,7 @@
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)<br/>
 ![yamdb workflow](https://github.com/zerg959/foodgram-project-react/workflows/foodgram_workflow/badge.svg)
 <br/>
-
+##### Развёрнут на базе Django, Nginx, Gunicorn, PostgreSQL по адресу <a href="foodgram.hub10.ru/">foodgram.hub10.ru</a>
 ##### Cайт, на котором пользователи будут публиковать рецепты, добавлять чужие рецепты в избранное и подписываться на публикации других авторов.<br>
 ##### Сервис «Список покупок» позволит пользователям создавать список продуктов, которые нужно купить для приготовления выбранных блюд.
 
