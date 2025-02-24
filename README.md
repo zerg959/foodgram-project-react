@@ -78,4 +78,4 @@ sudo docker -it exec <NAME_CONTAINER or ID_CONTAINER> bash
 
 =================  Скриншоты  ==================<br>
 ![Скриншот](https://raw.githubusercontent.com/zerg959/foodgram-project-react/master/docs/screen1.PNG)
-
+![Скриншот](https://raw.githubusercontent.com/zerg959/foodgram-project-react/master/docs/screen2.PNG)
