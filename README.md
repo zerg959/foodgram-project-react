@@ -75,3 +75,6 @@ TELEGRAM_TOKEN=<токен вашего бота>
 sudo docker -it exec <NAME_CONTAINER or ID_CONTAINER> bash
 
 ```
+
+=================  Скриншоты  ==================
+
