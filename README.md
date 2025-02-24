@@ -77,5 +77,5 @@ sudo docker -it exec <NAME_CONTAINER or ID_CONTAINER> bash
 ```
 
 =================  Скриншоты  ==================<br>
-![Скриншот интерфейса](assets/images/my_project_screenshot.png)
+![Скриншот интерфейса](docs/screenshot1.png)
 
